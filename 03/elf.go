@@ -22,6 +22,7 @@ type number struct {
 func main() {
 	input := utils.ReadInput("input.txt")
 	fmt.Printf("A: %v\n", sumContactPoints(findNumbers(input), findSymbols(input, isSymbol)))
+	fmt.Printf("A: %v\n", multiplyContactPoints(findNumbers(input), findSymbols(input, isStar)))
 }
 
 func isSymbol(v string) bool {
@@ -43,13 +44,34 @@ func sumContactPoints(numbers []number, symbols []point) int {
 	return sum
 }
 
+func cond(p1 point, p2 point) bool {
+	return (p1.x+1 == p2.x && p1.y == p2.y) || (p1.x-1 == p2.x && p1.y == p2.y) ||
+		(p1.x == p2.x && p1.y+1 == p2.y) || (p1.x == p2.x && p1.y-1 == p2.y) ||
+		(p1.x-1 == p2.x && p1.y-1 == p2.y) || (p1.x+1 == p2.x && p1.y+1 == p2.y) ||
+		(p1.x+1 == p2.x && p1.y-1 == p2.y) || (p1.x-1 == p2.x && p1.y+1 == p2.y)
+}
+
+func multiplyContactPoints(numbers []number, symbols []point) int {
+	var sum int
+	for _, symbol := range symbols {
+		nmbs := make([]number, 0)
+		for _, num := range numbers {
+			if neighbour(num.points, []point{symbol}) {
+				nmbs = append(nmbs, num)
+			}
+			if len(nmbs) == 2 {
+				sum += nmbs[0].value * nmbs[1].value
+				break
+			}
+		}
+	}
+	return sum
+}
+
 func neighbour(points []point, symbols []point) bool {
 	for _, num := range points {
 		for _, symbol := range symbols {
-			if (num.x+1 == symbol.x && num.y == symbol.y) || (num.x-1 == symbol.x && num.y == symbol.y) ||
-				(num.x == symbol.x && num.y+1 == symbol.y) || (num.x == symbol.x && num.y-1 == symbol.y) ||
-				(num.x-1 == symbol.x && num.y-1 == symbol.y) || (num.x+1 == symbol.x && num.y+1 == symbol.y) ||
-				(num.x+1 == symbol.x && num.y-1 == symbol.y) || (num.x-1 == symbol.x && num.y+1 == symbol.y) {
+			if cond(num, symbol) {
 				return true
 			}
 		}
