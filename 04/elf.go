@@ -14,10 +14,32 @@ type scratch struct {
 	owned   []int
 }
 
+type copy struct {
+	id    int
+	count int
+}
+
 func main() {
 	input := utils.ReadInput("input.txt")
 	scratches := toScratches(input)
 	fmt.Printf("A: %v\n", sum(scratches))
+	fmt.Printf("B: %v\n", copies(scratches))
+}
+
+func copies(scratches []scratch) int {
+	cps := make([]copy, 0)
+	for _, s := range scratches {
+		cps = append(cps, copy{
+			id:    s.id,
+			count: count(s.winning, s.owned),
+		})
+	}
+	for i := 0; i < len(cps); i++ {
+		for j := 0; j < cps[i].count; j++ {
+			cps = append(cps, cps[cps[i].id+j])
+		}
+	}
+	return len(cps)
 }
 
 func sum(scratches []scratch) int {
