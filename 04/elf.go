@@ -27,19 +27,24 @@ func main() {
 }
 
 func copies(scratches []scratch) int {
-	cps := make([]copy, 0)
-	for _, s := range scratches {
-		cps = append(cps, copy{
-			id:    s.id,
-			count: count(s.winning, s.owned),
-		})
+	c := make([]int, len(scratches))
+
+	for i := range scratches {
+		c[i] = 1
 	}
-	for i := 0; i < len(cps); i++ {
-		for j := 0; j < cps[i].count; j++ {
-			cps = append(cps, cps[cps[i].id+j])
+
+	for i := range scratches {
+		for j := i + 1; j < i+1+count(scratches[i].winning, scratches[i].owned); j++ {
+			c[j] += c[i]
 		}
 	}
-	return len(cps)
+
+	t := 0
+	for _, cc := range c {
+		t += cc
+	}
+
+	return t
 }
 
 func sum(scratches []scratch) int {
