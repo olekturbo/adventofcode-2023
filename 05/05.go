@@ -35,9 +35,15 @@ func main() {
 		if i == 0 {
 			s = strings.Replace(s, "seeds: ", "", 1)
 			sp := strings.Split(s, " ")
-			for _, seed := range sp {
+			for x, seed := range sp {
+				if x%2 == 1 {
+					continue
+				}
 				sseed, _ := strconv.Atoi(seed)
-				ks = append(ks, k{seed: sseed})
+				dseed, _ := strconv.Atoi(sp[x+1])
+				for b := 0; b < dseed; b++ {
+					ks = append(ks, k{seed: b + sseed})
+				}
 			}
 		}
 
