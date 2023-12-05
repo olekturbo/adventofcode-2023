@@ -27,7 +27,14 @@ func main() {
 
 	input := strings.Split(string(f), "\n\n")
 
-	var ks []k
+	var seeds []int
+	var soils []int
+	var fertilizer []int
+	var waters []int
+	var lights []int
+	var temperatures []int
+	var humidities []int
+	var locations []int
 
 	for i, s := range input {
 
@@ -42,13 +49,14 @@ func main() {
 				sseed, _ := strconv.Atoi(seed)
 				dseed, _ := strconv.Atoi(sp[x+1])
 				for b := 0; b < dseed; b++ {
-					ks = append(ks, k{seed: b + sseed})
+					seeds = append(seeds, b+sseed)
 				}
 			}
 		}
 
 		// seed-to-soil
 		if i == 1 {
+			soils = make([]int, len(seeds))
 			for j, ss := range strings.Split(s, "\n") {
 				if j == 0 {
 					continue
@@ -60,17 +68,17 @@ func main() {
 				ll, _ := strconv.Atoi(l)
 
 				for z := 0; z < ll; z++ {
-					for x, kk := range ks {
-						if kk.seed == ssource+z {
-							ks[x].soil = ddest + z
+					for x, kk := range seeds {
+						if kk == ssource+z {
+							soils[x] = ddest + z
 						}
 					}
 				}
 			}
 
-			for x, kk := range ks {
-				if kk.soil == 0 {
-					ks[x].soil = kk.seed
+			for x, kk := range soils {
+				if kk == 0 {
+					soils[x] = seeds[x]
 				}
 			}
 
@@ -78,6 +86,7 @@ func main() {
 
 		// soil-to-fertilizer
 		if i == 2 {
+			fertilizer = make([]int, len(seeds))
 			for j, ss := range strings.Split(s, "\n") {
 				if j == 0 {
 					continue
@@ -89,17 +98,17 @@ func main() {
 				ll, _ := strconv.Atoi(l)
 
 				for z := 0; z < ll; z++ {
-					for x, kk := range ks {
-						if kk.soil == ssource+z {
-							ks[x].fertilizer = ddest + z
+					for x, kk := range soils {
+						if kk == ssource+z {
+							fertilizer[x] = ddest + z
 						}
 					}
 				}
 			}
 
-			for x, kk := range ks {
-				if kk.fertilizer == 0 {
-					ks[x].fertilizer = kk.soil
+			for x, kk := range fertilizer {
+				if kk == 0 {
+					fertilizer[x] = soils[x]
 				}
 			}
 
@@ -107,6 +116,7 @@ func main() {
 
 		// fertilizer-to-water
 		if i == 3 {
+			waters = make([]int, len(seeds))
 			for j, ss := range strings.Split(s, "\n") {
 				if j == 0 {
 					continue
@@ -118,17 +128,17 @@ func main() {
 				ll, _ := strconv.Atoi(l)
 
 				for z := 0; z < ll; z++ {
-					for x, kk := range ks {
-						if kk.fertilizer == ssource+z {
-							ks[x].water = ddest + z
+					for x, kk := range fertilizer {
+						if kk == ssource+z {
+							waters[x] = ddest + z
 						}
 					}
 				}
 			}
 
-			for x, kk := range ks {
-				if kk.water == 0 {
-					ks[x].water = kk.fertilizer
+			for x, kk := range waters {
+				if kk == 0 {
+					waters[x] = fertilizer[x]
 				}
 			}
 
@@ -136,6 +146,7 @@ func main() {
 
 		// water-to-light
 		if i == 4 {
+			lights = make([]int, len(seeds))
 			for j, ss := range strings.Split(s, "\n") {
 				if j == 0 {
 					continue
@@ -147,17 +158,17 @@ func main() {
 				ll, _ := strconv.Atoi(l)
 
 				for z := 0; z < ll; z++ {
-					for x, kk := range ks {
-						if kk.water == ssource+z {
-							ks[x].light = ddest + z
+					for x, kk := range waters {
+						if kk == ssource+z {
+							lights[x] = ddest + z
 						}
 					}
 				}
 			}
 
-			for x, kk := range ks {
-				if kk.light == 0 {
-					ks[x].light = kk.water
+			for x, kk := range lights {
+				if kk == 0 {
+					lights[x] = waters[x]
 				}
 			}
 
@@ -165,6 +176,7 @@ func main() {
 
 		// light-to-temperature
 		if i == 5 {
+			temperatures = make([]int, len(seeds))
 			for j, ss := range strings.Split(s, "\n") {
 				if j == 0 {
 					continue
@@ -176,17 +188,17 @@ func main() {
 				ll, _ := strconv.Atoi(l)
 
 				for z := 0; z < ll; z++ {
-					for x, kk := range ks {
-						if kk.light == ssource+z {
-							ks[x].temperature = ddest + z
+					for x, kk := range lights {
+						if kk == ssource+z {
+							temperatures[x] = ddest + z
 						}
 					}
 				}
 			}
 
-			for x, kk := range ks {
-				if kk.temperature == 0 {
-					ks[x].temperature = kk.light
+			for x, kk := range temperatures {
+				if kk == 0 {
+					temperatures[x] = lights[x]
 				}
 			}
 
@@ -194,6 +206,7 @@ func main() {
 
 		// temperature-to-humidity
 		if i == 6 {
+			humidities = make([]int, len(seeds))
 			for j, ss := range strings.Split(s, "\n") {
 				if j == 0 {
 					continue
@@ -205,17 +218,17 @@ func main() {
 				ll, _ := strconv.Atoi(l)
 
 				for z := 0; z < ll; z++ {
-					for x, kk := range ks {
-						if kk.temperature == ssource+z {
-							ks[x].humidity = ddest + z
+					for x, kk := range temperatures {
+						if kk == ssource+z {
+							humidities[x] = ddest + z
 						}
 					}
 				}
 			}
 
-			for x, kk := range ks {
-				if kk.humidity == 0 {
-					ks[x].humidity = kk.temperature
+			for x, kk := range humidities {
+				if kk == 0 {
+					humidities[x] = temperatures[x]
 				}
 			}
 
@@ -223,6 +236,7 @@ func main() {
 
 		// humidity-to-location
 		if i == 7 {
+			locations = make([]int, len(seeds))
 			for j, ss := range strings.Split(s, "\n") {
 				if j == 0 {
 					continue
@@ -234,17 +248,17 @@ func main() {
 				ll, _ := strconv.Atoi(l)
 
 				for z := 0; z < ll; z++ {
-					for x, kk := range ks {
-						if kk.humidity == ssource+z {
-							ks[x].location = ddest + z
+					for x, kk := range humidities {
+						if kk == ssource+z {
+							locations[x] = ddest + z
 						}
 					}
 				}
 			}
 
-			for x, kk := range ks {
-				if kk.location == 0 {
-					ks[x].location = kk.humidity
+			for x, kk := range locations {
+				if kk == 0 {
+					locations[x] = humidities[x]
 				}
 			}
 
@@ -253,9 +267,11 @@ func main() {
 	}
 
 	var locs []int
-	for _, kk := range ks {
-		locs = append(locs, kk.location)
+	for _, kk := range locations {
+		locs = append(locs, kk)
 	}
+
+	fmt.Println(locations)
 
 	fmt.Println(slices.Min(locs))
 
