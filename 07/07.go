@@ -32,8 +32,8 @@ type hand struct {
 }
 
 func main() {
-	parsed := parse(utils.ReadInput("input.txt"))
-	fmt.Printf("A: %v\n", bid(parsed))
+	fmt.Printf("A: %v\n", bid(parse(utils.ReadInput("input.txt"), false)))
+	fmt.Printf("B: %v\n", bid(parse(utils.ReadInput("input.txt"), true)))
 }
 
 func bid(hands []hand) int {
@@ -86,15 +86,41 @@ func higher(h hand, hh hand) bool {
 	return false
 }
 
+func maxIdx(m map[int]int) int {
+	idx := 0
+	max := 0
+	for k, v := range m {
+		if k == 0 {
+			if v == 5 {
+				return v
+			}
+			continue
+		}
+		if v > max {
+			max = v
+			idx = k
+		}
+	}
+
+	return idx
+}
+
 func rank(values []int) int {
 	m := make(map[int]int, 0)
 	for _, v := range values {
 		m[v]++
 	}
 
+	mIdx := maxIdx(m)
+
+	m[mIdx] += m[0]
+
 	ret := make([]int, 0)
 
-	for _, v := range m {
+	for k, v := range m {
+		if k == 0 {
+			continue
+		}
 		if v == 5 {
 			ret = append(ret, FiveOfKind)
 		}
@@ -145,7 +171,7 @@ func inArray(i []int, v int) bool {
 	return false
 }
 
-func parse(input []string) []hand {
+func parse(input []string, j bool) []hand {
 	hands := make([]hand, 0, len(input))
 	for _, s := range input {
 		sp := strings.Split(s, " ")
@@ -158,6 +184,10 @@ func parse(input []string) []hand {
 			if err == nil {
 				values = append(values, val)
 			} else {
+				if j && k == "J" {
+					values = append(values, 0)
+					continue
+				}
 				values = append(values, cards[k])
 			}
 		}
