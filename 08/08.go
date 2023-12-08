@@ -14,7 +14,34 @@ type collection struct {
 func main() {
 	collections, ways := parse(utils.ReadInput("input.txt"))
 
-	fmt.Println(steps(collections, ways, "AAA", "ZZZ"))
+	kla := steps(collections, ways, "KLA", "SNZ")
+	aaa := steps(collections, ways, "AAA", "ZZZ")
+	nda := steps(collections, ways, "NDA", "DMZ")
+	qva := steps(collections, ways, "QVA", "GTZ")
+	lba := steps(collections, ways, "LBA", "CJZ")
+	nna := steps(collections, ways, "NNA", "BDZ")
+
+	fmt.Printf("A: %v\n", aaa)
+	fmt.Printf("B: %v\n", lcm(kla, lcm(aaa, lcm(nda, lcm(qva, lcm(lba, nna))))))
+}
+
+func gcd(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
+func lcm(a, b int, integers ...int) int {
+	result := a * b / gcd(a, b)
+
+	for i := 0; i < len(integers); i++ {
+		result = lcm(result, integers[i])
+	}
+
+	return result
 }
 
 func steps(collections map[string]collection, ways []string, start, end string) int {
