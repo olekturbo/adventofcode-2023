@@ -178,3 +178,36 @@ func Test_parseInput(t *testing.T) {
 		})
 	}
 }
+
+func Test_takeFirst(t *testing.T) {
+	type args struct {
+		s [][]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "1",
+			args: args{
+				s: [][]int{
+					{10, 13, 16, 21, 30, 45},
+					{3, 3, 5, 9, 15},
+					{0, 2, 4, 6},
+					{2, 2, 2},
+					{0, 0},
+					{0},
+				},
+			},
+			want: []int{10, 3, 0, 2, 0, 0},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := takeFirst(tt.args.s); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("takeFirst() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

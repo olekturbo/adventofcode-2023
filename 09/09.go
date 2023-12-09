@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func extrapolate(s []int) [][]int {
@@ -31,6 +32,16 @@ func takeLast(s [][]int) []int {
 	return ret
 }
 
+func takeFirst(s [][]int) []int {
+	ret := make([]int, len(s))
+
+	for i := 0; i < len(s); i++ {
+		ret[i] = s[i][0]
+	}
+
+	return ret
+}
+
 func history(s []int) int {
 	var ret int
 
@@ -39,6 +50,18 @@ func history(s []int) int {
 	}
 
 	return ret
+}
+
+func historyBehind(s []int) int {
+	ret := make([]int, len(s)+1)
+	ret[0] = 0
+	j := 1
+	for i := len(s) - 1; i >= 0; i-- {
+		ret[j] = s[i] - ret[j-1]
+		j++
+	}
+
+	return ret[len(ret)-1]
 }
 
 func parseInput(s []string) [][]int {
@@ -62,11 +85,23 @@ func parseInput(s []string) [][]int {
 func main() {
 	p := parseInput(utils.ReadInput("input.txt"))
 
-	fmt.Printf("A: %v\n", func() int {
+	aStart := time.Now()
+	fmt.Printf("A: %v, ", func() int {
 		var ret int
 		for _, pp := range p {
 			ret += history(takeLast(extrapolate(pp)))
 		}
 		return ret
 	}())
+	fmt.Printf("%v\n", time.Since(aStart))
+
+	bStart := time.Now()
+	fmt.Printf("B: %v, ", func() int {
+		var ret int
+		for _, pp := range p {
+			ret += historyBehind(takeFirst(extrapolate(pp)))
+		}
+		return ret
+	}())
+	fmt.Printf("%v\n", time.Since(bStart))
 }
