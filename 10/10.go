@@ -4,6 +4,7 @@ import (
 	"adventofcode-2023/utils"
 	"fmt"
 	"math"
+	"time"
 )
 
 type point struct {
@@ -119,6 +120,8 @@ func parse(s []string) points {
 
 func main() {
 	pts := parse(utils.ReadInput("test.txt"))
+
+	aStart := time.Now()
 	start := pts.findByValue("S")
 	d := 0
 	start.markAsVisited(d)
@@ -135,7 +138,7 @@ func main() {
 		return m
 	}()
 
-	fmt.Println(math.Ceil(max / 2))
+	fmt.Printf("%v: %v\n", math.Ceil(max/2), time.Since(aStart))
 }
 
 func f(d int, pts points, start *point) {
