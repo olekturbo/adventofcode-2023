@@ -22,8 +22,9 @@ func parse(s []string) [][]int {
 	ss := make([]string, 0)
 	for _, v := range s {
 		if !strings.Contains(v, "#") {
-			ss = append(ss, v)
-			ss = append(ss, v)
+			for i := 0; i < 1000; i++ {
+				ss = append(ss, v)
+			}
 		} else {
 			ss = append(ss, v)
 		}
@@ -33,8 +34,9 @@ func parse(s []string) [][]int {
 		var aa string
 		for j, vv := range v {
 			if _, ok := y0[j]; ok {
-				aa += string(vv)
-				aa += string(vv)
+				for i := 0; i < 1000; i++ {
+					aa += string(vv)
+				}
 			} else {
 				aa += string(vv)
 			}
@@ -91,12 +93,15 @@ func distances(points []point) []float64 {
 }
 
 func main() {
-	in := utils.ReadInput("input.txt")
+	in := utils.ReadInput("test.txt")
 	p := parse(in)
 	d := distances(points(p))
 	var s int
 	for _, dd := range d {
-		s += int(dd)
+		idd := int(dd)
+		r := idd % 1000
+		z := (idd-r)*1000 + r
+		s += z
 	}
 	fmt.Println(s)
 }
